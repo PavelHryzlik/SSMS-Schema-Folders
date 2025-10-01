@@ -50,11 +50,12 @@ namespace SsmsSchemaFolders
 
                     if (schema != null && Options.Level1FolderType == Options.Level2FolderType)
                     {
-                        int dotIndex = schema.IndexOf('.');
-                        if (dotIndex == -1)
-                        {
-                            dotIndex = schema.IndexOf('_');
-                        }
+                        //int dotIndex = schema.IndexOf('.');
+                        //if (dotIndex == -1)
+                        //{
+                        //    dotIndex = schema.IndexOf('_');
+                        //}
+                        int dotIndex = schema.IndexOf('_');
                         if (dotIndex != -1)
                         {
                             schema = (folderLevel == 1) ? schema.Substring(0, dotIndex) : schema.Substring(dotIndex + 1);
@@ -176,11 +177,13 @@ namespace SsmsSchemaFolders
 
         private String GetNodeSchemaQuick(TreeNode node)
         {
-            var dotIndex = node.Text.IndexOf('.');
+            //var dotIndex = node.Text.IndexOf('.');
+            //if (dotIndex == -1)
+            var dotIndex = node.Text.IndexOf('_');
+
             if (dotIndex != -1)
                 return node.Text.Substring(0, dotIndex);
-            else
-                return null;
+            return null;
         }
 
         private String GetNodeSchema(TreeNode node)
@@ -201,7 +204,9 @@ namespace SsmsSchemaFolders
                 //var invariantName = ni.InvariantName;
                 //debug_message("ni.InvariantName:{0}", sw.ElapsedMilliseconds);
 
-                if (ni.InvariantName.EndsWith("." + ni.Name))
+                //if (ni.InvariantName.EndsWith("." + ni.Name))
+                //    return ni.InvariantName.Substring(0, ni.InvariantName.Length - ni.Name.Length - 1);
+                if (ni.InvariantName.EndsWith("_" + ni.Name))
                     return ni.InvariantName.Substring(0, ni.InvariantName.Length - ni.Name.Length - 1);
             }
             return null;
@@ -280,7 +285,7 @@ namespace SsmsSchemaFolders
             node.Text += " (sorting...)";
             //node.TreeView.Update();
 
-            var quickAndDirty = (Options.QuickSchema > 0 && node.Nodes.Count > Options.QuickSchema);
+            var quickAndDirty = (Options.QuickSchema >= 0 && node.Nodes.Count > Options.QuickSchema);
 
             //var sw = Stopwatch.StartNew();
             //sw.Restart();
@@ -343,7 +348,8 @@ namespace SsmsSchemaFolders
                     folderNode.Tag = nodeTag;
 
                     if (Options.AppendDot)
-                        folderNode.Text += ".";
+                        //folderNode.Text += ".";
+                        folderNode.Text += "_*";
 
                     if (Options.UseObjectIcon)
                     {
@@ -469,7 +475,7 @@ namespace SsmsSchemaFolders
             node.Text += " (sorting...)";
             node.TreeView.Update();
 
-            var quickAndDirty = (Options.QuickSchema > 0 && node.Nodes.Count > Options.QuickSchema);
+            var quickAndDirty = Options.QuickSchema >= 0 && node.Nodes.Count > Options.QuickSchema;
 
             var sw = Stopwatch.StartNew();
             //debug_message("Sort Nodes:{0}", sw.ElapsedMilliseconds);
@@ -530,7 +536,8 @@ namespace SsmsSchemaFolders
                     schemaNode.Tag = nodeTag;
 
                     if (Options.AppendDot)
-                        schemaNode.Text += ".";
+                        //schemaNode.Text += ".";
+                        schemaNode.Text += "_*";
 
                     if (Options.UseObjectIcon)
                     {
